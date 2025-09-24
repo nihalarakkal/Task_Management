@@ -1,54 +1,74 @@
-# Task_Management
-We are enhancing the Task Management Application by allowing users to submit a short report and their worked hours when they complete a task. This will help track what was done on each task and how much time it took.
-Features
-User Roles
+**Task Management Application**
+Project Overview
 
-SuperAdmin: Full control; can manage users (add/edit/delete), promote/demote admins, view all tasks, and generate task reports.
+We are enhancing the Task Management Application by allowing users to submit a short report and their worked hours when completing a task. This feature helps track what was done on each task and the time spent, improving productivity monitoring and reporting.
 
-Admin: Can assign tasks to users, edit/delete tasks, view reports.
+****Features**
+User Roles**
 
-User: Can view tasks assigned to them, mark tasks as completed, submit completion reports and worked hours.
+**SuperAdmin:**
 
-Task Management
+Full control of the system
 
-Add, edit, delete tasks.
+Manage users (add/edit/delete)
 
-Assign tasks to users.
+Promote/demote admins
 
-Track task status (pending, in_progress, completed).
+View all tasks and generate reports
 
-Completion report and worked hours are required when marking tasks as completed.
+**Admin:**
 
-Authentication
+Assign tasks to users
 
-Login and logout functionality.
+Edit or delete tasks
 
-Redirect based on role after login.
+View task reports
 
-Forms
+**User:**
 
-TaskForm: Add or edit tasks.
+View tasks assigned to them
 
-CompletionForm: Submit completion report and worked hours.
+Mark tasks as completed
 
-UserForm: Add users with role and password.
+Submit completion reports and worked hours
 
-Admin Panel
+**Task Management**
 
-Full CRUD operations for tasks and users.
+Add, edit, delete tasks
 
-Task completion validation.
+Assign tasks to users
 
-Role management for admins.
+Track task status (pending, in_progress, completed)
 
+Completion report and worked hours required when marking tasks as completed
 
+**Authentication**
 
-Setup Instructions
-**1. Clone the repository**
-git clone <your-repo-url>
+Login and logout functionality
+
+Role-based redirects after login
+
+**Forms**
+
+TaskForm: Add or edit tasks
+
+CompletionForm: Submit completion report and worked hours
+
+UserForm: Add users with role and password
+**Admin Panel**
+
+Full CRUD operations for tasks and users
+
+Task completion validation
+
+Role management for admins
+
+**Setup Instructions**
+1. Clone the repository
+git clone https://github.com/nihalarakkal/Task_Management.git
 cd task_management_app
-**
-**2. Create a virtual environment****
+
+2. Create a virtual environment
 python -m venv venv
 
 
@@ -63,40 +83,48 @@ Mac/Linux:
 
 source venv/bin/activate
 
-**3. Install dependencies**
+3. Install dependencies
 pip install -r requirements.txt
 
 
-requirements.txt should include:
+Dependencies include:
 
 Django==5.2.6
 djangorestframework
 
-**4. Apply migrations**
+4. Apply migrations
 python manage.py makemigrations
 python manage.py migrate
 
-**5. Create a superuser**
+5. Create superuser
 python manage.py createsuperuser
 
 
 Follow prompts to create a superadmin account.
+
+Since a superuser is already created:
+
+Username: superadmin
+
+Password: supersecurepassword
+
+Optional: Verify and set superadmin fields manually:
+
 from tasks.models import User
 
-# Get the user you just created
 user = User.objects.get(username='superadmin')
 user.role = 'superadmin'
-user.is_staff = True  # Required to access admin panel
-user.is_superuser = True  # Optional for admin privileges
+user.is_staff = True
+user.is_superuser = True
 user.save()
 
-i have already created== username=superadmin, password="supersecurepassword"
-
-**6. Run the development server**
+6. Run the development server
 python manage.py runserver
 
 
 Open your browser: http://127.0.0.1:8000/
+
+Access URLs
 
 Login page: /
 
