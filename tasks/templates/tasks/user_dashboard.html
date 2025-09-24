@@ -1,0 +1,45 @@
+{% extends "tasks/base.html" %}
+{% block content %}
+<h2 class="mb-4">My Tasks</h2>
+<div class="row">
+  {% for task in tasks %}
+  <div class="col-md-4">
+    <div class="mb-3">
+  {{ form.completion_report.label_tag }}
+  {{ form.completion_report }}
+  {% if form.completion_report.errors %}
+    <div class="text-danger small">{{ form.completion_report.errors|striptags }}</div>
+  {% endif %}
+</div>
+
+<div class="mb-3">
+  {{ form.worked_hours.label_tag }}
+  {{ form.worked_hours }}
+  {% if form.worked_hours.errors %}
+    <div class="text-danger small">{{ form.worked_hours.errors|striptags }}</div>
+  {% endif %}
+</div>
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ task.title }}</h5>
+        <p class="card-text">{{ task.description|truncatechars:100 }}</p>
+        <p>
+          {% if task.status == "completed" %}
+          <span class="badge bg-success">Completed</span>
+          {% elif task.status == "in_progress" %}
+          <span class="badge bg-warning text-dark">In Progress</span>
+          {% else %}
+          <span class="badge bg-secondary">Pending</span>
+          {% endif %}
+        </p>
+        {% if task.status != "completed" %}
+        <a href="{% url 'complete_task' task.id %}" class="btn btn-primary btn-sm">Complete Task</a>
+        {% else %}
+        <span class="text-success">Task Completed</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

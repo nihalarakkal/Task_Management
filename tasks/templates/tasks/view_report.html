@@ -1,0 +1,31 @@
+{% extends "tasks/base.html" %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <div class="card shadow-sm">
+      <div class="card-header bg-info text-white">
+        <h4 class="mb-0">Task Completion Report</h4>
+      </div>
+      <div class="card-body">
+        <h5>Title: {{ task.title }}</h5>
+        <p><strong>Assigned To:</strong> {{ task.assigned_to.username }}</p>
+        <p><strong>Status:</strong>
+          {% if task.status == "completed" %}
+            <span class="badge bg-success">Completed</span>
+          {% elif task.status == "in_progress" %}
+            <span class="badge bg-warning text-dark">In Progress</span>
+          {% else %}
+            <span class="badge bg-secondary">Pending</span>
+          {% endif %}
+        </p>
+        <hr>
+        <p><strong>Completion Report:</strong></p>
+        <p>{{ task.completion_report }}</p>
+        <p><strong>Worked Hours:</strong> {{ task.worked_hours }}</p>
+
+        <a href="{% url 'superadmin_tasks' %}" class="btn btn-secondary mt-3">Back to Tasks</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

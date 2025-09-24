@@ -1,0 +1,30 @@
+{% extends "tasks/base.html" %}
+{% block content %}
+<h3>Task Report: {{ task.title }}</h3>
+
+<p><strong>Assigned To:</strong> {{ task.assigned_to.username }}</p>
+<p><strong>Status:</strong> {{ task.status|title }}</p>
+
+<p><strong>Completion Report:</strong>
+    {% if task.completion_report %}
+        {{ task.completion_report }}
+    {% else %}
+        Not provided
+    {% endif %}
+</p>
+
+<p><strong>Worked Hours:</strong>
+    {% if task.worked_hours %}
+        {% with hours=task.worked_hours|floatformat:2 %}
+            {% with h=hours|floatformat:0 m=hours|floatformat:2 %}
+                {% with mins=hours|floatformat:2|slice:"-2:" %}
+                    {{ h|stringformat:"d" }}h {{ mins|stringformat:"s" }}m
+                {% endwith %}
+            {% endwith %}
+        {% endwith %}
+    {% else %}
+        Not provided
+    {% endif %}
+</p>
+
+{% endblock %}

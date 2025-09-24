@@ -1,0 +1,10 @@
+{% extends "tasks/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Task Report: {{ task.title }}</h3>
+    <p><strong>Assigned To:</strong> {{ task.assigned_to.username }}</p>
+    <p><strong>Completion Report:</strong> {{ task.completion_report }}</p>
+    <p><strong>Worked Hours:</strong> {{ task.worked_hours }}</p>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+</div>
+{% endblock %}
