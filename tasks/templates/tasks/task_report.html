@@ -1,30 +1,85 @@
-{% extends "tasks/base.html" %}
-{% block content %}
-<h3>Task Report: {{ task.title }}</h3>
 
-<p><strong>Assigned To:</strong> {{ task.assigned_to.username }}</p>
-<p><strong>Status:</strong> {{ task.status|title }}</p>
 
-<p><strong>Completion Report:</strong>
-    {% if task.completion_report %}
-        {{ task.completion_report }}
-    {% else %}
-        Not provided
-    {% endif %}
-</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<!-- Bootstrap JS Bundle (includes Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<p><strong>Worked Hours:</strong>
-    {% if task.worked_hours %}
-        {% with hours=task.worked_hours|floatformat:2 %}
-            {% with h=hours|floatformat:0 m=hours|floatformat:2 %}
-                {% with mins=hours|floatformat:2|slice:"-2:" %}
-                    {{ h|stringformat:"d" }}h {{ mins|stringformat:"s" }}m
-                {% endwith %}
-            {% endwith %}
-        {% endwith %}
-    {% else %}
-        Not provided
-    {% endif %}
-</p>
+  <title>Task Management</title>
+  <link rel="stylesheet" href="/static/tasks/css/bootstrap.min.css">
+  <style>
+    body { background-color: #f4f6f9; }
+    .sidebar { min-height: 100vh; }
+    .card { border-radius: 0.5rem; }
+    .table th, .table td { vertical-align: middle; }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="#">Task Management</a>
 
-{% endblock %}
+    <span class="text-white me-2">Hi, {{ user.username }} (admin)</span>
+    <a href="/logout/" class="btn btn-danger btn-sm">Logout</a>
+
+  </div>
+</nav>
+
+<div class="container-fluid mt-3">
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8">
+    <div class="card shadow-sm">
+      <div class="card-header bg-info text-white">
+        <h4 class="mb-0">Task Completion Report</h4>
+      </div>
+      <div class="card-body">
+        <h5>Title: project report</h5>
+        <p><strong>Assigned To:</strong> yadu</p>
+        <p><strong>Status:</strong>
+
+            <span class="badge bg-success">Completed</span>
+
+        </p>
+        <hr>
+        <p><strong>Completion Report:</strong></p>
+        <p>Accomplishments:
+
+Developed a fully functional Task Management System with both frontend and backend.
+
+Implemented CRUD operations for tasks, including create, read, update, and delete functionalities.
+
+Designed a responsive UI using React.js (or HTML/CSS/JS) with interactive features like search, filter, and sort.
+
+Built a RESTful API using Django REST Framework, including proper validation and error handling.
+
+Integrated authentication (JWT) to secure API endpoints.
+
+Challenges Faced:
+
+Handling database schema changes and migrations without losing existing data.
+
+Managing state in the frontend to reflect real-time updates without page reloads.
+
+Debugging asynchronous API calls and ensuring proper error handling for edge cases.
+
+Ensuring cross-browser compatibility and responsiveness across different devices.</p>
+        <p><strong>Worked Hours:</strong> 3.00</p>
+
+        <a href="/admin" class="btn btn-secondary mt-3">Back to Tasks</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script src="/static/tasks/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

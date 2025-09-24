@@ -21,13 +21,18 @@
                                 {% endif %}
                             </div>
                         {% endfor %}
+
                         <div class="d-flex justify-content-between">
                             <button type="submit" class="btn btn-success">Add User</button>
                             <a href="{% url 'manage_users' %}" class="btn btn-secondary">Cancel</a>
+                            <br>
+                             <a href="{% url 'superadmin_dashboard' %}" class="btn btn-secondary ">Back to Home</a>
                         </div>
                     </form>
+
                 </div>
             </div>
+
         </div>
     </div>
 </div>

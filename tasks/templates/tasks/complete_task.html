@@ -1,12 +1,358 @@
-<form method="post">
-  {% csrf_token %}
-  <div class="mb-3">
-    {{ form.completion_report.label_tag }}
-    {{ form.completion_report }}
-  </div>
-  <div class="mb-3">
-    {{ form.worked_hours.label_tag }}
-    {{ form.worked_hours }}
-  </div>
-  <button type="submit" class="btn btn-success">Mark as Completed</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Completion Form</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-title {
+            color: #2d3748;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-subtitle {
+            color: #718096;
+            font-size: 1.1rem;
+            margin-bottom: 0;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .form-label {
+            color: #2d3748;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-control {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-1px);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .input-icon {
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+            min-width: 200px;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .help-text {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .form-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .form-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Form validation styles */
+        .form-control.is-invalid {
+            border-color: #e53e3e;
+            box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+        }
+
+        .form-control.is-valid {
+            border-color: #38a169;
+            box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.1);
+        }
+
+        /* Loading state */
+        .submit-btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .submit-btn.loading .btn-text {
+            opacity: 0;
+        }
+
+        .submit-btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div class="form-header">
+                <h1 class="form-title">
+                    <i class="fas fa-tasks" style="color: #667eea;"></i>
+                    Complete Task
+                </h1>
+                <p class="form-subtitle">Provide your completion details below</p>
+            </div>
+
+            <form method="post" id="completionForm">
+                <!-- CSRF Token (Django template tag) -->
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label class="form-label" for="id_completion_report">
+                        <i class="fas fa-clipboard-check input-icon"></i>
+                        {{ form.completion_report.label_tag }}
+                    </label>
+                    {{ form.completion_report }}
+                    <div class="help-text">
+                        <i class="fas fa-info-circle"></i>
+                        Describe what you accomplished, challenges faced, and key outcomes.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="id_worked_hours">
+                        <i class="fas fa-clock input-icon"></i>
+                        {{ form.worked_hours.label_tag }}
+                    </label>
+                    {{ form.worked_hours }}
+                    <div class="help-text">
+                        <i class="fas fa-info-circle"></i>
+                        Enter the total hours spent on this task (e.g., 2.5 for 2 hours 30 minutes).
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="btn-content">
+                            <span class="btn-text">
+                                <i class="fas fa-check-circle"></i>
+                                Mark as Completed
+                            </span>
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form enhancement JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('completionForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const completionReport = document.getElementById('id_completion_report');
+            const workedHours = document.getElementById('id_worked_hours');
+
+            // Add Bootstrap classes to form controls
+            completionReport.classList.add('form-control');
+            workedHours.classList.add('form-control');
+
+            // Form validation
+            function validateForm() {
+                let isValid = true;
+
+                // Validate completion report
+                if (completionReport.value.trim() === '') {
+                    completionReport.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    completionReport.classList.remove('is-invalid');
+                    completionReport.classList.add('is-valid');
+                }
+
+                // Validate worked hours
+                const hours = parseFloat(workedHours.value);
+                if (isNaN(hours) || hours <= 0) {
+                    workedHours.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    workedHours.classList.remove('is-invalid');
+                    workedHours.classList.add('is-valid');
+                }
+
+                return isValid;
+            }
+
+            // Real-time validation
+            completionReport.addEventListener('input', function() {
+                if (this.value.trim() !== '') {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                } else {
+                    this.classList.remove('is-valid');
+                }
+            });
+
+            workedHours.addEventListener('input', function() {
+                const hours = parseFloat(this.value);
+                if (!isNaN(hours) && hours > 0) {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                } else {
+                    this.classList.remove('is-valid');
+                }
+            });
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                if (!validateForm()) {
+                    e.preventDefault();
+                    // Shake animation for invalid form
+                    form.style.animation = 'shake 0.5s ease-in-out';
+                    setTimeout(() => {
+                        form.style.animation = '';
+                    }, 500);
+                    return false;
+                }
+
+                // Loading state
+                submitBtn.classList.add('loading');
+            });
+
+            // Auto-resize textarea
+            completionReport.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.max(120, this.scrollHeight) + 'px';
+            });
+        });
+
+        // Add shake animation
+        const shakeKeyframes = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                75% { transform: translateX(5px); }
+            }
+        `;
+        const style = document.createElement('style');
+        style.textContent = shakeKeyframes;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
